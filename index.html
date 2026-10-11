@@ -258,6 +258,198 @@
 
     }
 
+
+/* AFRI_DESIGN MANAGER - LUXURY THEME */
+
+:root {
+
+  --afri-navy: #101c33;
+
+  --afri-navy-light: #1b2b49;
+
+  --afri-gold: #c5a45d;
+
+  --afri-white: #ffffff;
+
+  --afri-bg: #f4f6fa;
+
+  --afri-text: #202b3c;
+
+}
+
+body {
+
+  background: var(--afri-bg);
+
+  color: var(--afri-text);
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+}
+
+header,
+
+nav,
+
+.sidebar,
+
+.navbar {
+
+  background: var(--afri-navy);
+
+  color: var(--afri-white);
+
+}
+
+header h1,
+
+header h2,
+
+nav a,
+
+.sidebar a,
+
+.navbar a {
+
+  color: var(--afri-white);
+
+}
+
+button,
+
+.btn,
+
+button[type="submit"],
+
+input[type="submit"] {
+
+  background: var(--afri-navy);
+
+  color: var(--afri-white);
+
+  border: 1px solid var(--afri-gold);
+
+  border-radius: 10px;
+
+  padding: 10px 16px;
+
+  font-weight: 600;
+
+}
+
+button:hover,
+
+.btn:hover {
+
+  background: var(--afri-navy-light);
+
+  border-color: var(--afri-gold);
+
+}
+
+.card,
+
+.stat-card,
+
+.panel {
+
+  background: var(--afri-white);
+
+  border: 1px solid #e5e8ef;
+
+  border-top: 3px solid var(--afri-gold);
+
+  border-radius: 14px;
+
+  padding: 16px;
+
+  box-shadow: 0 4px 14px rgba(16, 28, 51, 0.06);
+
+}
+
+input,
+
+select,
+
+textarea {
+
+  max-width: 100%;
+
+  border: 1px solid #d6dce6;
+
+  border-radius: 8px;
+
+  padding: 10px;
+
+  box-sizing: border-box;
+
+}
+
+input:focus,
+
+select:focus,
+
+textarea:focus {
+
+  outline: 2px solid var(--afri-gold);
+
+  outline-offset: 1px;
+
+}
+
+table th {
+
+  background: var(--afri-navy);
+
+  color: var(--afri-white);
+
+}
+
+a {
+
+  accent-color: var(--afri-gold);
+
+}
+
+@media (max-width: 600px) {
+
+  body {
+
+    font-size: 14px;
+
+  }
+
+  .card,
+
+  .stat-card,
+
+  .panel {
+
+    padding: 12px;
+
+    border-radius: 12px;
+
+  }
+
+  button,
+
+  .btn {
+
+    min-height: 42px;
+
+  }
+
+  input,
+
+  select,
+
+  textarea {
+
+    font-size: 16px;
+
+  }
+
+}
   </style>
 
 </head>
