@@ -1100,6 +1100,266 @@
 
 </script>
 
+
+
+<!-- AFRI-DESIGN STOCK -->
+
+<section id="afriStock" style="padding:16px;font-family:Arial,sans-serif">
+
+  <h2>AFRI-DESIGN | STOCK</h2>
+
+  <p>Usimamizi wa vitambaa na vifaa vya ushonaji</p>
+
+  <h3>Ongeza bidhaa</h3>
+
+  <label>Jina la bidhaa</label>
+
+  <input id="stkName" placeholder="Mf. Tetron, Silk, Canivas"
+
+    style="display:block;width:100%;padding:10px;margin:6px 0">
+
+  <label>Aina</label>
+
+  <select id="stkType" style="display:block;width:100%;padding:10px;margin:6px 0">
+
+    <option>Kitambaa</option>
+
+    <option>Kifaa cha ushonaji</option>
+
+  </select>
+
+  <label>Rangi</label>
+
+  <input id="stkColor" placeholder="Mf. Nyeusi"
+
+    style="display:block;width:100%;padding:10px;margin:6px 0">
+
+  <label>Kipimo</label>
+
+  <select id="stkUnit" style="display:block;width:100%;padding:10px;margin:6px 0">
+
+    <option value="mita">Mita</option>
+
+    <option value="kipande">Kipande</option>
+
+    <option value="roll">Roll</option>
+
+    <option value="pakiti">Pakiti</option>
+
+    <option value="pcs">PCS</option>
+
+  </select>
+
+  <label>Kiasi kilichopo</label>
+
+  <input id="stkQty" type="number" min="0" step="0.01" placeholder="Mf. 50"
+
+    style="display:block;width:100%;padding:10px;margin:6px 0">
+
+  <label>Gharama kwa kipimo (TZS)</label>
+
+  <input id="stkCost" type="number" min="0" step="0.01" placeholder="Mf. 2500"
+
+    style="display:block;width:100%;padding:10px;margin:6px 0">
+
+  <button onclick="afriAddStock()"
+
+    style="padding:12px;background:#173c32;color:white;border:0;border-radius:6px">
+
+    Hifadhi bidhaa
+
+  </button>
+
+  <hr>
+
+  <h3>Muhtasari</h3>
+
+  <p>Jumla ya bidhaa: <b id="stkCount">0</b></p>
+
+  <p>Thamani ya stock: <b id="stkValue">TZS 0</b></p>
+
+  <h3>Bidhaa zilizopo</h3>
+
+  <input id="stkSearch" placeholder="Tafuta bidhaa..."
+
+    oninput="afriShowStock()"
+
+    style="display:block;width:100%;padding:10px;margin:6px 0">
+
+  <div id="stkList"></div>
+
+</section>
+
+<script>
+
+(function () {
+
+  const storageKey = "afri_design_stock_basic";
+
+  let stock = [];
+
+  try {
+
+    stock = JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+  } catch (e) {
+
+    stock = [];
+
+  }
+
+  function saveStock() {
+
+    localStorage.setItem(storageKey, JSON.stringify(stock));
+
+    afriShowStock();
+
+  }
+
+  window.afriAddStock = function () {
+
+    const name = document.getElementById("stkName").value.trim();
+
+    const type = document.getElementById("stkType").value;
+
+    const color = document.getElementById("stkColor").value.trim();
+
+    const unit = document.getElementById("stkUnit").value;
+
+    const qtyText = document.getElementById("stkQty").value;
+
+    const costText = document.getElementById("stkCost").value;
+
+    const qty = Number(qtyText);
+
+    const cost = Number(costText);
+
+    if (!name || qtyText === "" || costText === "" ||
+
+        !Number.isFinite(qty) || !Number.isFinite(cost) ||
+
+        qty < 0 || cost < 0) {
+
+      alert("Jaza jina, kiasi na gharama sahihi.");
+
+      return;
+
+    }
+
+    stock.push({
+
+      id: Date.now(),
+
+      name: name,
+
+      type: type,
+
+      color: color,
+
+      unit: unit,
+
+      qty: qty,
+
+      cost: cost
+
+    });
+
+    saveStock();
+
+    ["stkName","stkColor","stkQty","stkCost"].forEach(function (id) {
+
+      document.getElementById(id).value = "";
+
+    });
+
+    alert("Bidhaa imehifadhiwa!");
+
+  };
+
+  window.afriShowStock = function () {
+
+    const search = document.getElementById("stkSearch").value.toLowerCase();
+
+    const filtered = stock.filter(function (item) {
+
+      return (item.name + " " + item.type + " " + item.color)
+
+        .toLowerCase().includes(search);
+
+    });
+
+    document.getElementById("stkCount").textContent = stock.length;
+
+    const total = stock.reduce(function (sum, item) {
+
+      return sum + item.qty * item.cost;
+
+    }, 0);
+
+    document.getElementById("stkValue").textContent =
+
+      "TZS " + total.toLocaleString("en-US");
+
+    const list = document.getElementById("stkList");
+
+    list.innerHTML = "";
+
+    if (!filtered.length) {
+
+      list.textContent = "Bado hakuna bidhaa zilizohifadhiwa.";
+
+      return;
+
+    }
+
+    filtered.forEach(function (item) {
+
+      const card = document.createElement("div");
+
+      card.style.cssText =
+
+        "border:1px solid #ddd;border-radius:8px;padding:12px;margin:8px 0";
+
+      const title = document.createElement("b");
+
+      title.textContent = item.name;
+
+      card.appendChild(title);
+
+      const details = document.createElement("p");
+
+      details.textContent = item.type + " | Rangi: " +
+
+        (item.color || "Haijawekwa");
+
+      card.appendChild(details);
+
+      const quantity = document.createElement("p");
+
+      quantity.textContent = "Salio: " + item.qty + " " + item.unit;
+
+      card.appendChild(quantity);
+
+      const value = document.createElement("p");
+
+      value.textContent = "Thamani: TZS " +
+
+        (item.qty * item.cost).toLocaleString("en-US");
+
+      card.appendChild(value);
+
+      list.appendChild(card);
+
+    });
+
+  };
+
+  afriShowStock();
+
+})();
+
+</script>
+
 </body>
 
 </html>
