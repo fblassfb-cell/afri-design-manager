@@ -320,7 +320,7 @@
 
     <button data-page="expenses">Matumizi</button>
 
-    <button data-page="reports">Ripoti</button>
+    <button data-page="reports">Ripoti</<button data-page="measurements">Vipimo</button>
 
   </nav>
 
@@ -436,6 +436,57 @@
 
   </section>
 
+  
+
+<section id="measurements" class="panel page hidden">
+
+  <h2>Vipimo vya Mteja</h2>
+
+  <label>Chagua mteja</label>
+
+  <select id="measurementCustomer">
+
+    <option value="">Chagua mteja</option>
+
+  </select>
+
+  <h3>Vipimo vya Coat</h3>
+
+  <div class="fields">
+
+    <div><label>Kifua (inches)</label><input id="coatChest" type="number" step="0.25"></div>
+
+    <div><label>Tumbo (inches)</label><input id="coatWaist" type="number" step="0.25"></div>
+
+    <div><label>Bega (inches)</label><input id="coatShoulder" type="number" step="0.25"></div>
+
+    <div><label>Mikono (inches)</label><input id="coatSleeve" type="number" step="0.25"></div>
+
+    <div><label>Urefu wa Coat (inches)</label><input id="coatLength" type="number" step="0.25"></div>
+
+  </div>
+
+  <h3>Vipimo vya Trouser</h3>
+
+  <div class="fields">
+
+    <div><label>Kiuno (inches)</label><input id="trouserWaistNew" type="number" step="0.25"></div>
+
+    <div><label>Makalio (inches)</label><input id="trouserHip" type="number" step="0.25"></div>
+
+    <div><label>Urefu wa Trouser (inches)</label><input id="trouserLengthNew" type="number" step="0.25"></div>
+
+    <div><label>Mapaja (inches)</label><input id="trouserThigh" type="number" step="0.25"></div>
+
+    <div><label>Mguu chini (inches)</label><input id="trouserBottom" type="number" step="0.25"></div>
+
+  </div>
+
+  <button class="save" type="button" id="saveMeasurements">Hifadhi Vipimo</button>
+
+  <p id="measurementMessage" class="muted"></p>
+
+</section>
   <section id="orders" class="panel page hidden">
 
     <h2>Oda mpya</h2>
@@ -743,6 +794,7 @@
   }
 
   function render() {
+    renderMeasurementCustomers();
 
     $("customerCount").textContent = data.customers.length;
 
@@ -915,6 +967,94 @@
     alert("Mteja amehifadhiwa.");
 
   });
+
+
+function loadMeasurementCustomer() {
+
+  const id = $("measurementCustomer").value;
+
+  const c = data.customers.find(x => x.id === id);
+
+  if (!c) return;
+
+  $("coatChest").value = c.coatChest || "";
+
+  $("coatWaist").value = c.coatWaist || "";
+
+  $("coatShoulder").value = c.coatShoulder || "";
+
+  $("coatSleeve").value = c.coatSleeve || "";
+
+  $("coatLength").value = c.coatLength || "";
+
+  $("trouserWaistNew").value = c.trouserWaistNew || "";
+
+  $("trouserHip").value = c.trouserHip || "";
+
+  $("trouserLengthNew").value = c.trouserLengthNew || "";
+
+  $("trouserThigh").value = c.trouserThigh || "";
+
+  $("trouserBottom").value = c.trouserBottom || "";
+
+}
+
+function renderMeasurementCustomers() {
+
+  $("measurementCustomer").innerHTML =
+
+    '<option value="">Chagua mteja</option>' +
+
+    data.customers.map(c =>
+
+      `<option value="${c.id}">${escapeHTML(c.name)}</option>`
+
+    ).join("");
+
+}
+
+$("measurementCustomer").addEventListener("change", loadMeasurementCustomer);
+
+$("saveMeasurements").addEventListener("click", () => {
+
+  const id = $("measurementCustomer").value;
+
+  const c = data.customers.find(x => x.id === id);
+
+  if (!c) {
+
+    alert("Tafadhali chagua mteja kwanza.");
+
+    return;
+
+  }
+
+  c.coatChest = $("coatChest").value;
+
+  c.coatWaist = $("coatWaist").value;
+
+  c.coatShoulder = $("coatShoulder").value;
+
+  c.coatSleeve = $("coatSleeve").value;
+
+  c.coatLength = $("coatLength").value;
+
+  c.trouserWaistNew = $("trouserWaistNew").value;
+
+  c.trouserHip = $("trouserHip").value;
+
+  c.trouserLengthNew = $("trouserLengthNew").value;
+
+  c.trouserThigh = $("trouserThigh").value;
+
+  c.trouserBottom = $("trouserBottom").value;
+
+  save();
+
+  $("measurementMessage").textContent = "Vipimo vimehifadhiwa.";
+
+});
+
 
   $("orderForm").addEventListener("submit", e => {
 
