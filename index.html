@@ -1,0 +1,1105 @@
+
+
+<!DOCTYPE html>
+
+<html lang="sw">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="theme-color" content="#111827">
+
+  <title>Afri-design Manager</title>
+
+  <style>
+
+    * { box-sizing: border-box; }
+
+    body {
+
+      margin: 0;
+
+      font-family: Arial, sans-serif;
+
+      background: #f3f4f6;
+
+      color: #1f2937;
+
+    }
+
+    header {
+
+      background: #111827;
+
+      color: white;
+
+      padding: 22px 16px;
+
+      text-align: center;
+
+      border-bottom: 4px solid #b89b5e;
+
+    }
+
+    header h1 {
+
+      margin: 0;
+
+      font-size: 24px;
+
+      letter-spacing: 1px;
+
+    }
+
+    header p {
+
+      color: #d1b878;
+
+      margin-bottom: 0;
+
+    }
+
+    main {
+
+      max-width: 900px;
+
+      margin: auto;
+
+      padding: 15px;
+
+    }
+
+    .stats {
+
+      display: grid;
+
+      grid-template-columns: repeat(2, 1fr);
+
+      gap: 10px;
+
+      margin-bottom: 18px;
+
+    }
+
+    .stat, .panel {
+
+      background: white;
+
+      padding: 16px;
+
+      border-radius: 12px;
+
+      box-shadow: 0 2px 8px #0000000d;
+
+    }
+
+    .stat small { color: #6b7280; }
+
+    .stat strong {
+
+      display: block;
+
+      margin-top: 8px;
+
+      font-size: 19px;
+
+      overflow-wrap: anywhere;
+
+    }
+
+    nav {
+
+      display: flex;
+
+      gap: 8px;
+
+      overflow-x: auto;
+
+      padding: 4px 0 12px;
+
+    }
+
+    nav button { white-space: nowrap; }
+
+    button {
+
+      background: #111827;
+
+      color: white;
+
+      border: 0;
+
+      padding: 12px 15px;
+
+      border-radius: 7px;
+
+      cursor: pointer;
+
+    }
+
+    button.active, .gold {
+
+      background: #b89b5e;
+
+      color: #111827;
+
+    }
+
+    .panel { margin-bottom: 15px; }
+
+    h2 { font-size: 19px; margin-top: 0; }
+
+    label {
+
+      display: block;
+
+      font-size: 13px;
+
+      margin: 12px 0 5px;
+
+      color: #4b5563;
+
+    }
+
+    input, select, textarea {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border: 1px solid #d1d5db;
+
+      border-radius: 7px;
+
+      font: inherit;
+
+      background: white;
+
+    }
+
+    .fields {
+
+      display: grid;
+
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      gap: 10px;
+
+    }
+
+    .full { grid-column: 1 / -1; }
+
+    .record {
+
+      border-top: 1px solid #e5e7eb;
+
+      padding: 13px 0;
+
+      overflow-wrap: anywhere;
+
+    }
+
+    .record:first-child { border-top: 0; }
+
+    .muted { color: #6b7280; font-size: 13px; }
+
+    .amount { font-weight: bold; color: #8a6b2e; }
+
+    .hidden { display: none; }
+
+    .delete {
+
+      background: #991b1b;
+
+      padding: 8px 10px;
+
+      margin-top: 8px;
+
+    }
+
+    .save {
+
+      margin-top: 16px;
+
+      width: 100%;
+
+      background: #b89b5e;
+
+      color: #111827;
+
+      font-weight: bold;
+
+    }
+
+    footer {
+
+      text-align: center;
+
+      padding: 20px;
+
+      font-size: 12px;
+
+      color: #6b7280;
+
+    }
+
+    @media (max-width: 480px) {
+
+      main { padding: 10px; }
+
+      .fields { grid-template-columns: 1fr; }
+
+      .full { grid-column: auto; }
+
+      .stat { padding: 12px; }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+  <h1>AFRI-DESIGN</h1>
+
+  <p>Manager · Tailoring Business</p>
+
+</header>
+
+<main>
+
+  <div class="stats">
+
+    <div class="stat">
+
+      <small>Wateja</small>
+
+      <strong id="customerCount">0</strong>
+
+    </div>
+
+    <div class="stat">
+
+      <small>Oda zote</small>
+
+      <strong id="orderCount">0</strong>
+
+    </div>
+
+    <div class="stat">
+
+      <small>Malipo yaliyopokelewa</small>
+
+      <strong id="paidTotal">TSh 0</strong>
+
+    </div>
+
+    <div class="stat">
+
+      <small>Madeni ya wateja</small>
+
+      <strong id="debtTotal">TSh 0</strong>
+
+    </div>
+
+  </div>
+
+  <nav>
+
+    <button class="active" data-page="customers">Wateja</button>
+
+    <button data-page="orders">Oda</button>
+
+    <button data-page="payments">Malipo</button>
+
+    <button data-page="expenses">Matumizi</button>
+
+    <button data-page="reports">Ripoti</button>
+
+  </nav>
+
+  <section id="customers" class="panel page">
+
+    <h2>Usajili wa mteja</h2>
+
+    <form id="customerForm">
+
+      <div class="fields">
+
+        <div>
+
+          <label>Jina la mteja *</label>
+
+          <input name="name" required>
+
+        </div>
+
+        <div>
+
+          <label>Namba ya simu</label>
+
+          <input name="phone" type="tel">
+
+        </div>
+
+        <div>
+
+          <label>Kifua (inches)</label>
+
+          <input name="chest" type="number" step="0.25">
+
+        </div>
+
+        <div>
+
+          <label>Tumbo (inches)</label>
+
+          <input name="waist" type="number" step="0.25">
+
+        </div>
+
+        <div>
+
+          <label>Bega (inches)</label>
+
+          <input name="shoulder" type="number" step="0.25">
+
+        </div>
+
+        <div>
+
+          <label>Mikono (inches)</label>
+
+          <input name="sleeve" type="number" step="0.25">
+
+        </div>
+
+        <div>
+
+          <label>Urefu wa koti (inches)</label>
+
+          <input name="coat" type="number" step="0.25">
+
+        </div>
+
+        <div>
+
+          <label>Kiuno cha suruali (inches)</label>
+
+          <input name="trouserWaist" type="number" step="0.25">
+
+        </div>
+
+        <div>
+
+          <label>Urefu wa suruali (inches)</label>
+
+          <input name="trouserLength" type="number" step="0.25">
+
+        </div>
+
+        <div>
+
+          <label>Shingo (inches)</label>
+
+          <input name="neck" type="number" step="0.25">
+
+        </div>
+
+        <div class="full">
+
+          <label>Vipimo vingine / maelezo</label>
+
+          <textarea name="notes" rows="2"></textarea>
+
+        </div>
+
+      </div>
+
+      <button class="save" type="submit">Hifadhi mteja</button>
+
+    </form>
+
+    <hr>
+
+    <label>Tafuta mteja</label>
+
+    <input id="customerSearch" placeholder="Jina au namba ya simu...">
+
+    <div id="customerList"></div>
+
+  </section>
+
+  <section id="orders" class="panel page hidden">
+
+    <h2>Oda mpya</h2>
+
+    <form id="orderForm">
+
+      <label>Mteja *</label>
+
+      <select name="customerId" id="orderCustomer" required></select>
+
+      <div class="fields">
+
+        <div>
+
+          <label>Aina ya vazi</label>
+
+          <select name="item">
+
+            <option>Suti kamili</option>
+
+            <option>Coat</option>
+
+            <option>Suruali</option>
+
+            <option>Shati</option>
+
+            <option>Kaftan / Kaunda</option>
+
+            <option>Agbada</option>
+
+            <option>Tuxedo</option>
+
+            <option>Vazi jingine</option>
+
+          </select>
+
+        </div>
+
+        <div>
+
+          <label>Tarehe ya kuwasilisha</label>
+
+          <input name="delivery" type="date">
+
+        </div>
+
+        <div>
+
+          <label>Bei ya oda (TSh) *</label>
+
+          <input name="price" type="number" min="0" required>
+
+        </div>
+
+        <div>
+
+          <label>Malipo ya awali (TSh)</label>
+
+          <input name="deposit" type="number" min="0" value="0">
+
+        </div>
+
+        <div>
+
+          <label>Hali ya oda</label>
+
+          <select name="status">
+
+            <option>Inasubiri</option>
+
+            <option>Inashonwa</option>
+
+            <option>Tayari</option>
+
+            <option>Imekabidhiwa</option>
+
+          </select>
+
+        </div>
+
+        <div>
+
+          <label>Maelezo ya oda</label>
+
+          <input name="notes" placeholder="Rangi, kitambaa, style...">
+
+        </div>
+
+      </div>
+
+      <button class="save" type="submit">Hifadhi oda</button>
+
+    </form>
+
+    <div id="orderList"></div>
+
+  </section>
+
+  <section id="payments" class="panel page hidden">
+
+    <h2>Rekodi ya malipo</h2>
+
+    <form id="paymentForm">
+
+      <label>Chagua oda</label>
+
+      <select name="orderId" id="paymentOrder" required></select>
+
+      <label>Kiasi kilicholipwa (TSh) *</label>
+
+      <input name="amount" type="number" min="1" required>
+
+      <label>Tarehe</label>
+
+      <input name="date" type="date" id="paymentDate">
+
+      <label>Njia ya malipo</label>
+
+      <select name="method">
+
+        <option>Cash</option>
+
+        <option>M-Pesa</option>
+
+        <option>Airtel Money</option>
+
+        <option>Mixx by Yas</option>
+
+        <option>Benki</option>
+
+        <option>Nyingine</option>
+
+      </select>
+
+      <button class="save" type="submit">Hifadhi malipo</button>
+
+    </form>
+
+    <div id="paymentList"></div>
+
+  </section>
+
+  <section id="expenses" class="panel page hidden">
+
+    <h2>Matumizi ya biashara</h2>
+
+    <form id="expenseForm">
+
+      <label>Aina ya matumizi *</label>
+
+      <input name="description" required
+
+        placeholder="Kitambaa, usafiri, umeme...">
+
+      <label>Kiasi (TSh) *</label>
+
+      <input name="amount" type="number" min="1" required>
+
+      <label>Tarehe</label>
+
+      <input name="date" type="date" id="expenseDate">
+
+      <button class="save" type="submit">Hifadhi matumizi</button>
+
+    </form>
+
+    <div id="expenseList"></div>
+
+  </section>
+
+  <section id="reports" class="panel page hidden">
+
+    <h2>Muhtasari wa biashara</h2>
+
+    <div id="reportContent"></div>
+
+    <button id="exportBtn" class="save" type="button">
+
+      Pakua nakala ya data (JSON)
+
+    </button>
+
+    <label>Rejesha data kutoka nakala ya awali</label>
+
+    <input id="importFile" type="file" accept=".json,application/json">
+
+    <p class="muted">
+
+      Hifadhi nakala mara kwa mara. Faili hii ya msingi haitumii
+
+      cloud sync; data ya kifaa kimoja haihamii yenyewe kwenda kingine.
+
+    </p>
+
+  </section>
+
+</main>
+
+<footer>Afri-design Manager · Precision in every detail</footer>
+
+<script>
+
+(() => {
+
+  const KEY = "afriDesignManagerV1";
+
+  const emptyData = () => ({
+
+    customers: [], orders: [], payments: [], expenses: []
+
+  });
+
+  let data;
+
+  try {
+
+    data = JSON.parse(localStorage.getItem(KEY)) || emptyData();
+
+  } catch {
+
+    data = emptyData();
+
+  }
+
+  for (const key of ["customers", "orders", "payments", "expenses"]) {
+
+    if (!Array.isArray(data[key])) data[key] = [];
+
+  }
+
+  const $ = id => document.getElementById(id);
+
+  const money = n => "TSh " +
+
+    (Number(n) || 0).toLocaleString("en-TZ");
+
+  const today = () => new Date().toLocaleDateString("en-CA");
+
+  $("paymentDate").value = today();
+
+  $("expenseDate").value = today();
+
+  function save() {
+
+    localStorage.setItem(KEY, JSON.stringify(data));
+
+    render();
+
+  }
+
+  function escapeHTML(value) {
+
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+
+      "&": "&amp;", "<": "&lt;", ">": "&gt;",
+
+      '"': "&quot;", "'": "&#39;"
+
+    })[c]);
+
+  }
+
+  function customerName(id) {
+
+    return data.customers.find(c => c.id === id)?.name || "Mteja amefutwa";
+
+  }
+
+  function paid(orderId) {
+
+    return data.payments
+
+      .filter(p => p.orderId === orderId)
+
+      .reduce((sum, p) => sum + Number(p.amount), 0);
+
+  }
+
+  function orderPaid(order) {
+
+    return Number(order.deposit || 0) + paid(order.id);
+
+  }
+
+  function balance(order) {
+
+    return Math.max(0, Number(order.price) - orderPaid(order));
+
+  }
+
+  function record(title, details, id, type) {
+
+    return `<div class="record">
+
+      <strong>${escapeHTML(title)}</strong>
+
+      <div>${details}</div>
+
+      <button class="delete" data-delete="${escapeHTML(id)}"
+
+        data-type="${type}">Futa</button>
+
+    </div>`;
+
+  }
+
+  function render() {
+
+    $("customerCount").textContent = data.customers.length;
+
+    $("orderCount").textContent = data.orders.length;
+
+    $("paidTotal").textContent = money(
+
+      data.orders.reduce((s, o) => s + orderPaid(o), 0)
+
+    );
+
+    $("debtTotal").textContent = money(
+
+      data.orders.reduce((s, o) => s + balance(o), 0)
+
+    );
+
+    const search = $("customerSearch").value.toLowerCase();
+
+    $("customerList").innerHTML = data.customers
+
+      .filter(c => (c.name + " " + c.phone).toLowerCase().includes(search))
+
+      .map(c => record(
+
+        c.name,
+
+        `<div class="muted">${escapeHTML(c.phone || "Hakuna simu")}</div>
+
+         <div class="muted">Kifua: ${escapeHTML(c.chest || "-")} ·
+
+         Tumbo: ${escapeHTML(c.waist || "-")} ·
+
+         Bega: ${escapeHTML(c.shoulder || "-")}</div>
+
+         <div class="muted">Mikono: ${escapeHTML(c.sleeve || "-")} ·
+
+         Koti: ${escapeHTML(c.coat || "-")} ·
+
+         Suruali: ${escapeHTML(c.trouserLength || "-")}</div>
+
+         <div class="muted">${escapeHTML(c.notes || "")}</div>`,
+
+        c.id, "customers"
+
+      )).join("") || '<p class="muted">Bado hakuna wateja.</p>';
+
+    $("orderCustomer").innerHTML =
+
+      '<option value="">Chagua mteja</option>' +
+
+      data.customers.map(c =>
+
+        `<option value="${escapeHTML(c.id)}">${escapeHTML(c.name)}</option>`
+
+      ).join("");
+
+    $("paymentOrder").innerHTML =
+
+      '<option value="">Chagua oda</option>' +
+
+      data.orders.map(o =>
+
+        `<option value="${escapeHTML(o.id)}">${escapeHTML(customerName(o.customerId))} — ${escapeHTML(o.item)} — ${money(balance(o))}</option>`
+
+      ).join("");
+
+    $("orderList").innerHTML = data.orders.map(o => record(
+
+      customerName(o.customerId) + " · " + o.item,
+
+      `<div class="amount">${money(o.price)} · Deni: ${money(balance(o))}</div>
+
+       <div class="muted">Kukabidhi: ${escapeHTML(o.delivery || "-")} ·
+
+       Hali: ${escapeHTML(o.status)}</div>
+
+       <div class="muted">${escapeHTML(o.notes || "")}</div>`,
+
+      o.id, "orders"
+
+    )).join("") || '<p class="muted">Bado hakuna oda.</p>';
+
+    $("paymentList").innerHTML = data.payments.map(p => record(
+
+      customerName(data.orders.find(o => o.id === p.orderId)?.customerId),
+
+      `${money(p.amount)} · ${escapeHTML(p.date)} · ${escapeHTML(p.method)}`,
+
+      p.id, "payments"
+
+    )).join("") || '<p class="muted">Bado hakuna malipo.</p>';
+
+    $("expenseList").innerHTML = data.expenses.map(e => record(
+
+      e.description,
+
+      `${money(e.amount)} · ${escapeHTML(e.date)}`,
+
+      e.id, "expenses"
+
+    )).join("") || '<p class="muted">Bado hakuna matumizi.</p>';
+
+    const revenue = data.orders.reduce((s, o) => s + orderPaid(o), 0);
+
+    const expenses = data.expenses.reduce((s, e) => s + Number(e.amount), 0);
+
+    const totalOrders = data.orders.reduce((s, o) => s + Number(o.price), 0);
+
+    $("reportContent").innerHTML = `
+
+      <p>Jumla ya thamani ya oda: <strong>${money(totalOrders)}</strong></p>
+
+      <p>Malipo yaliyorekodiwa: <strong>${money(revenue)}</strong></p>
+
+      <p>Madeni yaliyobaki: <strong>${money(data.orders.reduce((s,o) => s + balance(o), 0))}</strong></p>
+
+      <p>Matumizi yaliyorekodiwa: <strong>${money(expenses)}</strong></p>
+
+      <p>Salio la fedha baada ya matumizi yaliyorekodiwa:
+
+        <strong>${money(revenue - expenses)}</strong></p>
+
+    `;
+
+  }
+
+  document.querySelectorAll("nav button").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+
+      document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+
+      $(button.dataset.page).classList.remove("hidden");
+
+      button.classList.add("active");
+
+    });
+
+  });
+
+  function formData(form) {
+
+    return Object.fromEntries(new FormData(form).entries());
+
+  }
+
+  function newId() {
+
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+
+  }
+
+  $("customerForm").addEventListener("submit", e => {
+
+    e.preventDefault();
+
+    const c = formData(e.target);
+
+    c.id = newId();
+
+    data.customers.push(c);
+
+    e.target.reset();
+
+    save();
+
+    alert("Mteja amehifadhiwa.");
+
+  });
+
+  $("orderForm").addEventListener("submit", e => {
+
+    e.preventDefault();
+
+    const o = formData(e.target);
+
+    o.id = newId();
+
+    o.price = Number(o.price);
+
+    o.deposit = Number(o.deposit || 0);
+
+    if (o.deposit > o.price) {
+
+      alert("Malipo ya awali hayawezi kuzidi bei ya oda.");
+
+      return;
+
+    }
+
+    data.orders.push(o);
+
+    e.target.reset();
+
+    save();
+
+    alert("Oda imehifadhiwa.");
+
+  });
+
+  $("paymentForm").addEventListener("submit", e => {
+
+    e.preventDefault();
+
+    const p = formData(e.target);
+
+    const order = data.orders.find(o => o.id === p.orderId);
+
+    p.amount = Number(p.amount);
+
+    if (!order || p.amount <= 0 || p.amount > balance(order)) {
+
+      alert("Angalia oda na kiasi. Malipo hayawezi kuzidi deni lililobaki.");
+
+      return;
+
+    }
+
+    p.id = newId();
+
+    data.payments.push(p);
+
+    e.target.reset();
+
+    $("paymentDate").value = today();
+
+    save();
+
+    alert("Malipo yamehifadhiwa.");
+
+  });
+
+  $("expenseForm").addEventListener("submit", e => {
+
+    e.preventDefault();
+
+    const x = formData(e.target);
+
+    x.id = newId();
+
+    x.amount = Number(x.amount);
+
+    data.expenses.push(x);
+
+    e.target.reset();
+
+    $("expenseDate").value = today();
+
+    save();
+
+    alert("Matumizi yamehifadhiwa.");
+
+  });
+
+  document.addEventListener("click", e => {
+
+    const button = e.target.closest("[data-delete]");
+
+    if (!button) return;
+
+    const { type, delete: id } = button.dataset;
+
+    if (!confirm("Una uhakika unataka kufuta rekodi hii?")) return;
+
+    if (type === "customers") {
+
+      if (data.orders.some(o => o.customerId === id)) {
+
+        alert("Mteja ana oda. Futa oda zake kwanza.");
+
+        return;
+
+      }
+
+    }
+
+    if (type === "orders" && data.payments.some(p => p.orderId === id)) {
+
+      alert("Oda ina malipo. Futa rekodi za malipo kwanza.");
+
+      return;
+
+    }
+
+    data[type] = data[type].filter(item => item.id !== id);
+
+    save();
+
+  });
+
+  $("customerSearch").addEventListener("input", render);
+
+  $("exportBtn").addEventListener("click", () => {
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+
+      type: "application/json"
+
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+
+    a.download = "afri-design-backup-" + today() + ".json";
+
+    a.click();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  });
+
+  $("importFile").addEventListener("change", async e => {
+
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    try {
+
+      const imported = JSON.parse(await file.text());
+
+      for (const key of ["customers", "orders", "payments", "expenses"]) {
+
+        if (!Array.isArray(imported[key])) throw new Error("Invalid data");
+
+      }
+
+      if (!confirm("Kurejesha nakala hii kutabadilisha data iliyopo kwenye kifaa hiki. Endelea?")) return;
+
+      data = imported;
+
+      save();
+
+      alert("Data imerejeshwa.");
+
+    } catch {
+
+      alert("Faili si nakala sahihi ya Afri-design Manager.");
+
+    }
+
+    e.target.value = "";
+
+  });
+
+  render();
+
+})();
+
+</script>
+
+</body>
+
+</html>
